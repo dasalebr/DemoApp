@@ -3,7 +3,7 @@ version: 2.1
 references:
   
   workspace_root: &workspace_root
-    /tmp/workspace
+   /tmp/workspace
     
   attach_workspace: &attach_workspace
     attach_workspace:
