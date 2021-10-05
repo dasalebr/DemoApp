@@ -40,7 +40,7 @@ jobs:
       - setup_remote_docker
       - *attach_workspace
       - checkout
-      - run: docker build -t checkpoint/demo-app:$CIRCLE_BRANCH .
+      - run: docker build -t checkpoint/demo-app:$CIRCLE_BRANCH . 
       - run: docker save checkpoint/demo-app:$CIRCLE_BRANCH -o /tmp/workspace/demo-app-image.tar
       - persist_to_workspace:
           root: *workspace_root
