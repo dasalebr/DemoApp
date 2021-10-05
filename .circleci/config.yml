@@ -40,6 +40,9 @@ jobs:
       - setup_remote_docker
       - *attach_workspace
       - checkout
+      - run: # print the name of the branch we're on
+          name: "What branch am I on?"
+          command: echo ${CIRCLE_BRANCH}
       - run: docker build -t checkpoint/demo-app:$CIRCLE_BRANCH . 
       - run: docker save checkpoint/demo-app:$CIRCLE_BRANCH -o /tmp/workspace/demo-app-image.tar
       - persist_to_workspace:
