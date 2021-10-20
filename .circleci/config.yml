@@ -16,7 +16,7 @@ jobs:
       - image: checkpoint/shiftleft:latest
     steps:
       - checkout # check out source code to working directory
-      - run: shiftleft code-scan -r -2003 -s ./ -r -2000 -e 3a99f75d-057f-4f6e-8164-baa9bd0c4d8c
+      - run: shiftleft code-scan -r -2003 -s ./  -e 3a99f75d-057f-4f6e-8164-baa9bd0c4d8c
 
   IaC-Assessment:
     docker:
