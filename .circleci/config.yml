@@ -1,26 +1,23 @@
-version: 2.1
-
-orbs:
-  sysdig: sysdig/sysdig@x.y.z
-
+version: 2
 jobs:
-  build-and-scan-advanced:
-    environment:
-      IMAGE_TO_BUILD: dasalebr/DemoApp
-    docker:
-      - image: checkpoint/demo-app
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker image
-          command: docker build -t ${IMAGE_TO_BUILD} .
-      - sysdig/inline-image-scan:
-          image-tag: ${IMAGE_TO_BUILD}
-          input-type: docker-daemon
-          sysdig-secure-token: ${SECURE_API_TOKEN}
-          sysdig-secure-url: ${SECURE_API_URL} # Configure this for on-prem instances
-          sysdig-skip-tls: true # Skip TLS verification when calling Secure endpoints. Use it only for on-prem instances with self-signed certificates.
-          ignore-failed-scan: false # Set to true if you don't want the pipeline to fail
-          extra-parameters: "" # Add more extra parameters to the Secure Inline Scanning workflow.
-                               # Check out https://docs.sysdig.com/en/integrate-with-ci-cd-tools.html#UUID-8945ddee-8c45-58b4-7d85-e06c4235d03c_section-5d9fc0748d40f-idm45530496679632
+ build:
+   machine: true
+   environment:
+     IMAGE_NAME: "dasalebr/DemoApp"
+     SCAN_IMAGE_NAME: "checkpoint/demo-app"
+
+   steps:
+     # checkout the source code
+     - checkout
+
+     # login
+     - run: |
+         docker login --username "$DOCKER_USER" --password "$DOCKER_PASS"
+     # build the application image
+     - run: docker build -t "$IMAGE_NAME" .
+
+     # scan the image
+     - run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock $SCAN_IMAGE_NAME /bin/inline_scan analyze -s hhttps://us2.app.sysdig.com -k "$SYSDIG_SECURE_TOKEN" "$IMAGE_NAME"
+
+     # deploy the image
+     - run: docker push "$IMAGE_NAME"
