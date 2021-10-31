@@ -3,7 +3,7 @@ jobs:
  build:
    machine: true
    environment:
-     IMAGE_NAME: "dasalebr/DemoApp"
+     IMAGE_NAME: "dasalebr/demoapp"
      SCAN_IMAGE_NAME: "checkpoint/demo-app"
 
    steps:
